@@ -1,0 +1,78 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: unless-stopped
+    configs:
+      - source: pgpass
+        target: /pgpass
+      - source: servers.json
+        target: /pgadmin4/servers.json
+
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      - '5000:80'
+      - '25:25'
+      - '143:143'
+    environment:
+      - ServerOptions__HostName=smtp4dev
+      - RelayOptions__Login=$MAIL_USER
+      - RelayOptions__Password=$MAIL_PASSWORD
+  
+  backend:
+    build:
+      dockerfile: ./backend.Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+      smtp4dev:
+        condition: service_started
+
+    env_file:
+      - .env
+    volumes:
+      - ./app:/backend/app
+      - ./migrations:/backend/migrations
+    restart: always
+
+configs:
+  pgpass:
+    content: db:5432:*:app:app
+  servers.json:
+    content: |
+      {"Servers": {"1": {
+        "Group": "Servers",
+        "Name": "docker-backend-db",
+        "Host": "db",
+        "Port": 5432,
+        "MaintenanceDB": "backend",
+        "Username": "app",
+        "PassFile": "/pgpass",
+        "SSLMode": "prefer"
+      }}}
