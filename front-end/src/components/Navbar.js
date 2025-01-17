@@ -12,9 +12,9 @@ export default function Navbar() {
         <h1 className=" text-2xl font-bold">Stockéa</h1>
         <div>
           <ul className="flex flex-row gap-5">
-            <li className="font-bold">Accueil</li>
-            <li className="font-bold">Le Cabinet</li>
-            <li className="font-bold">Contact</li>
+            <li className="font-semibold">Accueil</li>
+            <li className="font-semibold">Le Cabinet</li>
+            <li className="font-semibold">Contact</li>
           </ul>
         </div>
         <div className="flex flex-row justify-around ">
