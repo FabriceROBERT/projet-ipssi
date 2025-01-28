@@ -1,40 +1,32 @@
 const express = require("express");
 const db = require("./config/db");
 const cors = require("cors");
+require("dotenv").config(); // Charger les variables d'environnement
 
 const app = express();
 
 // Port du serveur
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 // Déclaration des routes API
 const usersRoutes = require("../routes/usersRoutes.js");
-
-// Utilisation de CORS et de JSON
+const signUpRoutes = require("../routes/signUpRoutes.js");
+const signInRoutes = require("../routes/signInRoutes.js");
+const invoicesRoutes = require("../routes/invoicesRoutes.js");
+const { authenticator } = require("./middleware/middleware.js");
 app.use(cors());
 app.use(express.json());
 
-// Route de test
-app.use("/api", usersRoutes);
+// Routes de API accessibles du côté client localhost:5000/
+app.use("/api/", usersRoutes); // Lier les routes utilisateurs à /api/users
+app.use("/api/", signUpRoutes); // Lier les routes d'authentification à /api/signup
+app.use("/api/", signInRoutes); // Lier les routes d'authentification à /api/signin
+app.use("/api/", invoicesRoutes); // Lier les routes de factures à /api/invoices
 
 app.get("/", (req, res) => {
-  res.send("Hello, World!");
+  res.send("Hello World!");
 });
-
-// Enregistrement des routes dans l'application
-app.use("/api/users", usersRoutes); // Lier les routes utilisateurs à /api/users
-
-// Demarrer le serveur
+// Démarre le serveur
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-
-  // Connexion à la base de données
-  db.connect((err) => {
-    if (err) {
-      console.error("Error connecting to the database:", err);
-      process.exit(1); // Arrêter le serveur si la connexion échoue
-    } else {
-      console.log("Connected to the database");
-    }
-  });
+  console.log(`Le serveur fonctionne sur le port ${PORT}`);
 });

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const middleware = require("../server/middleware/middleware");
 
 const usersController = require("../controller/entity/usersController");
 
@@ -8,12 +9,14 @@ const usersController = require("../controller/entity/usersController");
 ======================*/
 
 // Route pour récupérer tous les utilisateurs
-router.get("/users", usersController.getUsers);
+router.get("/users", middleware.authenticator, usersController.getUsers);
+// router.get("/users", usersController.getUsers);
 // Route pour récupérer un utilisateur par son ID
-router.get("/users/:id", usersController.getUserById);
+router.get("/users/:id", middleware.authenticator, usersController.getUserById);
 
 /**===================
  *         POST
 ======================*/
 
+router.post("/delete", usersController.deleteUsers);
 module.exports = router;

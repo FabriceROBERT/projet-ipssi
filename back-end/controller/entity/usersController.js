@@ -1,14 +1,11 @@
-const pool = require("../../server/config/db"); // Importez le pool de connexions
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const { pool } = require("../../server/config/db"); // Importez `pool` ici
 
-//  Récupérer tous les utilisateurs
+// Récupérer tous les utilisateurs
 exports.getUsers = async (req, res) => {
   try {
     console.log("query running....");
 
-    const [rows] = await pool.promise().query("SELECT * FROM users");
+    const [rows] = await pool.query("SELECT * FROM users");
 
     res.status(200).json(rows); // Retourne les utilisateurs
   } catch (error) {
@@ -17,16 +14,46 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-// Récupérer un utilisateur par son ID
+// Récupére un utilisateur par son ID
 exports.getUserById = async (req, res) => {
   let id = parseInt(req.params.id);
   try {
     console.log("query running....");
-    const rows = await connect.pool.query("SELECT * FROM users WHERE id = ?", [
-      id,
-    ]);
-    res.status(200).json(rows);
+
+    const [rows] = await pool.query("SELECT * FROM users WHERE id = ?", [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    res.status(200).json(rows[0]); // Retourne l'utilisateur trouvé
   } catch (error) {
-    console.log("erreur", error);
+    console.error("Erreur lors de la récupération de l'utilisateur :", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+// Supprime un utilisateur
+exports.deleteUsers = async (req, res) => {
+  const email = req.params.email;
+  try {
+    const result = await pool.query("DELETE FROM `users` WHERE email = ?", [
+      email,
+    ]);
+
+    if (result.affectedRows > 0) {
+      res
+        .status(200)
+        .json({ success: "Opération réussie. L'utilisateur a été supprimé." });
+    } else {
+      res
+        .status(404)
+        .json({ error: "Aucun utilisateur trouvé avec cet email." });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "Erreur interne du serveur. Veuillez réessayer." });
   }
 };
