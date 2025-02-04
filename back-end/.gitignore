@@ -2,4 +2,6 @@
 /coverage
 /build
 .env
+.env.development
+.env/
 .env.local

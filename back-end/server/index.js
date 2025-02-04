@@ -13,15 +13,18 @@ const usersRoutes = require("../routes/usersRoutes.js");
 const signUpRoutes = require("../routes/signUpRoutes.js");
 const signInRoutes = require("../routes/signInRoutes.js");
 const invoicesRoutes = require("../routes/invoicesRoutes.js");
-const { authenticator } = require("./middleware/middleware.js");
+const mailRoutes = require("../routes/mailRoutes.js");
+const subscriptionsRoutes = require("../routes/subscriptionsRoutes.js");
 app.use(cors());
 app.use(express.json());
 
 // Routes de API accessibles du côté client localhost:5000/
 app.use("/api/", usersRoutes); // Lier les routes utilisateurs à /api/users
-app.use("/api/", signUpRoutes); // Lier les routes d'authentification à /api/signup
-app.use("/api/", signInRoutes); // Lier les routes d'authentification à /api/signin
-app.use("/api/", invoicesRoutes); // Lier les routes de factures à /api/invoices
+app.use("/api/", signUpRoutes); // Lie les routes d'authentification à /api/signup
+app.use("/api/", signInRoutes); // Lie les routes d'authentification à /api/signin
+app.use("/api/", invoicesRoutes); // Lie les routes de factures à /api/invoices
+app.use("/api/", subscriptionsRoutes); // Lier les routes de factures à /api/subscriptions
+app.use("/api/mail/", mailRoutes); // Lie les routes de factures à /api/subscriptions
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

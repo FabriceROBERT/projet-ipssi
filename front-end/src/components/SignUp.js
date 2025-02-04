@@ -116,8 +116,6 @@ export default function SignUp({ onClose }) {
         company: formData.company,
       });
 
-      console.log("Utilisateur:", res);
-
       if (!res.success) {
         if (res.error === "L'utilisateur existe déjà.") {
           return toast.error("Un utilisateur avec cet email existe déjà.");
@@ -134,16 +132,37 @@ export default function SignUp({ onClose }) {
 
       // Création de la facture
       const invoiceData = calculateInvoiceData(res.id);
-      console.log("Données de la facture : ", invoiceData);
 
       const invoiceRes = await addInvoices({
         token: res.token,
         ...invoiceData,
       });
 
-      console.log("Facture créée :", invoiceRes);
-
       if (!invoiceRes) {
+        throw new Error(
+          invoiceRes.error || "Erreur lors de la création de la facture."
+        );
+      }
+
+      const subscription = await fetch(
+        "http://localhost:5000/api/subscriptions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${res.token}`,
+          },
+          body: JSON.stringify({
+            userId: res.id,
+            storageSize: 20,
+            price: invoiceData.totalTtc,
+            purchaseDate: new Date().toISOString(),
+            invoiceId: invoiceRes.invoiceId,
+          }),
+        }
+      );
+
+      if (!subscription) {
         throw new Error(
           invoiceRes.error || "Erreur lors de la création de la facture."
         );

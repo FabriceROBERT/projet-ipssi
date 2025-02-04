@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../actions/getUser";
 import { Link } from "react-router-dom";
-import Container from "../components/Container";
 import DashboardContainer from "../components/DashboardContainer";
 
 export default function Dashboard() {
@@ -110,10 +108,10 @@ export default function Dashboard() {
               <div className=" p-4 my-5 flex flex-row justify-between items-center content-center">
                 <div className="">
                   <Link
-                    to={"/dashboard/invoices"}
+                    to={"/dashboard/files"}
                     className="bg-zinc-800 text-white rounded-xl px-5 py-2"
                   >
-                    Voir mes factures
+                    Gérer mes fichiers
                   </Link>
                 </div>
                 <div className="">

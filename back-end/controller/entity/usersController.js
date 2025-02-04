@@ -1,6 +1,6 @@
-const { pool } = require("../../server/config/db"); // Importez `pool` ici
+const { pool } = require("../../server/config/db");
 
-// Récupérer tous les utilisateurs
+// Récupére tous les utilisateurs
 exports.getUsers = async (req, res) => {
   try {
     console.log("query running....");

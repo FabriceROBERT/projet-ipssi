@@ -5,6 +5,9 @@
   "dependencies": {
     "@paypal/react-paypal-js": "^8.8.1",
     "cra-template": "1.2.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
+    "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-fast-marquee": "^1.6.5",

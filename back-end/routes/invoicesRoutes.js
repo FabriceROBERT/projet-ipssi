@@ -11,13 +11,13 @@ const middleware = require("../server/middleware/middleware");
 // Récupére toutes les factures
 router.get(
   "/invoices",
-  //   middleware.authenticator,
+  middleware.authenticator,
   invoicesController.getInvoices
 );
 
 router.get(
   "/invoices/user/:userId",
-  //   middleware.authenticator,
+  middleware.authenticator,
   invoicesController.getInvoicesByUserId
 );
 
@@ -33,14 +33,22 @@ router.get(
 ======================*/
 
 // Ajoute une nouvelle facture
-router.post("/invoices", invoicesController.addInvoice);
+router.post(
+  "/invoices",
+  middleware.authenticator,
+  invoicesController.addInvoice
+);
 
 /**===================
  *         PUT
 ======================*/
 
 // Mettre à jour une facture par son ID
-router.put("/invoices/:id", invoicesController.updateInvoice);
+router.put(
+  "/invoices/:id",
+  middleware.authenticator,
+  invoicesController.updateInvoice
+);
 
 /**===================
  *         DELETE

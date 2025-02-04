@@ -25,7 +25,6 @@ exports.getInvoicesByUserId = async (req, res) => {
   }
 
   try {
-    console.log(`Récupération des factures pour l'utilisateur ${userId}...`);
     const [rows] = await pool.query("SELECT * FROM invoices WHERE userId = ?", [
       userId,
     ]);
@@ -57,7 +56,6 @@ exports.getInvoiceById = async (req, res) => {
   }
 
   try {
-    console.log("Récupération d'une facture...");
     const [rows] = await pool.query("SELECT * FROM invoices WHERE id = ?", [
       id,
     ]);
@@ -98,7 +96,6 @@ exports.addInvoice = async (req, res) => {
   }
 
   try {
-    console.log("Ajout d'une nouvelle facture...");
     const [result] = await pool.query(
       "INSERT INTO invoices (userId, quantity, pricePerUnit, totalHt, tax, totalTtc) VALUES (?, ?, ?, ?, ?, ?)",
       [userId, quantity, pricePerUnit, totalHt, tax, totalTtc]
@@ -142,7 +139,6 @@ exports.updateInvoice = async (req, res) => {
   }
 
   try {
-    console.log("Mise à jour d'une facture...");
     const [result] = await pool
       .promise()
       .query(
@@ -184,7 +180,6 @@ exports.deleteInvoice = async (req, res) => {
   }
 
   try {
-    console.log("Suppression d'une facture...");
     const [result] = await pool
       .promise()
       .query("DELETE FROM invoices WHERE id = ?", [id]);
