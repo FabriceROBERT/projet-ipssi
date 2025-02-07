@@ -32,6 +32,26 @@ exports.getUserById = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
+exports.deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    //  Si l'utilisateur existe
+    const [user] = await pool.execute("SELECT * FROM users WHERE id = ?", [id]);
+
+    if (!user.length) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    // Supprime l'utilisateur de la base de données
+    await pool.execute("DELETE FROM users WHERE id = ?", [id]);
+
+    res.status(200).json({ message: "Utilisateur supprimé avec succès" });
+  } catch (error) {
+    console.error("Erreur lors de la suppression de l'utilisateur :", error);
+    res.status(500).json({ message: "Erreur lors de la suppression" });
+  }
+};
 
 // Supprime un utilisateur
 exports.deleteUsers = async (req, res) => {

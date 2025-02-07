@@ -34,7 +34,7 @@ export const getUser = async () => {
       const user = await response.json();
       return user;
     } catch (error) {
-      console.error(`Erreur avec le token ${token}:`, error);
+      // console.error(`Erreur avec le token ${token}:`, error);
       throw error;
     }
   };
@@ -42,7 +42,7 @@ export const getUser = async () => {
   try {
     return await fetchUserWithToken(authToken);
   } catch (error) {
-    console.warn("Premier token échoué, tentative avec le second...");
+    // console.warn("Premier token échoué, tentative avec le second...");
     if (authToken2) {
       return await fetchUserWithToken(authToken2);
     } else {

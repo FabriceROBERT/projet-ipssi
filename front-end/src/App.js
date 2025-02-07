@@ -5,6 +5,7 @@ import ClientsPage from "./pages/ClientsPage";
 import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import InvoicesPage from "./pages/InvoicesPage";
+import FilesPage from "./pages/FilesPage";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/invoices" element={<InvoicesPage />} />
-          <Route path="/dashboard/files" element={<InvoicesPage />} />
+          <Route path="/dashboard/files" element={<FilesPage />} />
         </Routes>
       </Router>
       <Toaster />

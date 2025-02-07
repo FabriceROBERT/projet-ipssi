@@ -1,7 +1,8 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import toast from "react-hot-toast";
 
-const generateInvoicePDF = (invoice, user) => {
+const generateInvoicePDF = async (invoice, user) => {
   const doc = new jsPDF();
 
   // Infos de la société
@@ -61,6 +62,24 @@ const generateInvoicePDF = (invoice, user) => {
 
   // Sauvegarde du fichier
   doc.save(`facture_${invoice.id}.pdf`);
+
+  const pdfBlob = doc.output("blob");
+
+  const formData = new FormData();
+  formData.append("invoice", pdfBlob, `facture_${invoice.id}.pdf`);
+  formData.append("email", user.email);
+
+  try {
+    await fetch("http://localhost:5000/api/mail/send-invoice", {
+      method: "POST",
+      body: formData,
+    });
+    toast.success("Facture envoyée par e-mail !");
+    console.log(formData);
+  } catch (error) {
+    console.error("Erreur lors de l'envoi :", error);
+    toast.error("Échec de l'envoi de la facture.");
+  }
 };
 
 export default generateInvoicePDF;

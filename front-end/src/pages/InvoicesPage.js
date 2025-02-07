@@ -46,11 +46,6 @@ export default function InvoicesPage() {
     const userId = localStorage.getItem("userId");
 
     const fetchInvoices = async () => {
-      if (!token) {
-        setError("Token d'authentification manquant.");
-        return;
-      }
-
       try {
         const response = await fetch(
           `http://localhost:5000/api/invoices/user/${userId}`,
@@ -58,7 +53,7 @@ export default function InvoicesPage() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${authToken}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -70,10 +65,10 @@ export default function InvoicesPage() {
         const data = await response.json();
         setInvoices(data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des factures :", error);
-        setError(
-          error.message || "Erreur lors de la récupération des factures."
-        );
+        // console.error("Erreur lors de la récupération des factures :", error);
+        // setError(
+        //   error.message || "Erreur lors de la récupération des factures."
+        // );
       }
     };
 

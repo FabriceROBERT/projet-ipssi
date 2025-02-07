@@ -15,6 +15,7 @@ const signInRoutes = require("../routes/signInRoutes.js");
 const invoicesRoutes = require("../routes/invoicesRoutes.js");
 const mailRoutes = require("../routes/mailRoutes.js");
 const subscriptionsRoutes = require("../routes/subscriptionsRoutes.js");
+const filesRoutes = require("../routes/filesRoutes");
 app.use(cors());
 app.use(express.json());
 
@@ -24,7 +25,8 @@ app.use("/api/", signUpRoutes); // Lie les routes d'authentification à /api/sig
 app.use("/api/", signInRoutes); // Lie les routes d'authentification à /api/signin
 app.use("/api/", invoicesRoutes); // Lie les routes de factures à /api/invoices
 app.use("/api/", subscriptionsRoutes); // Lier les routes de factures à /api/subscriptions
-app.use("/api/mail/", mailRoutes); // Lie les routes de factures à /api/subscriptions
+app.use("/api/mail/", mailRoutes); // Envpoyer un mail
+app.use("/api/", filesRoutes); // Lie les routes de fichiers à /api/files
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

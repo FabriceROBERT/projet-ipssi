@@ -10,7 +10,6 @@ const usersController = require("../controller/entity/usersController");
 
 // Route pour récupérer tous les utilisateurs
 router.get("/users", middleware.authenticator, usersController.getUsers);
-// router.get("/users", usersController.getUsers);
 // Route pour récupérer un utilisateur par son ID
 router.get("/users/:id", middleware.authenticator, usersController.getUserById);
 
@@ -20,3 +19,10 @@ router.get("/users/:id", middleware.authenticator, usersController.getUserById);
 
 router.post("/delete", usersController.deleteUsers);
 module.exports = router;
+
+// Route pour supprimer un utilisateur
+router.delete(
+  "/users/:id",
+  middleware.authenticator,
+  usersController.deleteUser
+);

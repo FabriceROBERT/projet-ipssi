@@ -22,7 +22,7 @@ export default function SignUp({ onClose }) {
   const navigate = useNavigate();
 
   // Validation des champs
-  const validEmail = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const validEmail = /^[a-zA-Z0-9._:$!%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const validPassword = /^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/;
 
   // Gestion du changement des champs du formulaire

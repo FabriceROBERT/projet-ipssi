@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../actions/getUser";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import DashboardContainer from "../components/DashboardContainer";
 
 export default function Dashboard() {
@@ -13,9 +14,10 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const authToken = localStorage.getItem("token");
+    const authToken = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
 
-    if (authToken) {
+    if (authToken || token) {
       // Appel à la fonction getUser
       getUser()
         .then((fetchedUser) => {
@@ -44,6 +46,34 @@ export default function Dashboard() {
       </div>
     );
   }
+
+  const handleDeleteAccount = () => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer votre compte ?")) {
+      fetch(`http://localhost:5000/api/users/${user.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Correction ici
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            // Suppression des données utilisateur
+            localStorage.removeItem("token");
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("userId");
+            toast.success("Votre compte a été supprimé avec succès.");
+            navigate("/");
+          } else {
+            console.error("Échec de la suppression du compte.");
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la suppression du compte:", error);
+        });
+    }
+  };
+
   // S'il n'est pas connecté, on redirige vers la page d'accueil ou que le token expire
   if (error) {
     return (
@@ -79,18 +109,44 @@ export default function Dashboard() {
             <hr className=" size-[1px] w-full bg-black" />
 
             <div className="p-4 mb-5 flex flex-wrap justify-between">
-              <Link
-                to={"/dashboard/clients"}
-                className="bg-zinc-800 text-white rounded-xl px-5 py-2"
-              >
-                Voir mes clients
-              </Link>
+              <div>
+                <Link
+                  to={"/dashboard/clients"}
+                  className="bg-zinc-800 text-white rounded-xl px-5 py-2"
+                >
+                  Voir mes clients
+                </Link>
+              </div>
+              <div className="">
+                <Link
+                  to={"/dashboard/files"}
+                  className="bg-zinc-800 text-white rounded-xl px-5 py-2"
+                >
+                  Gérer mes fichiers
+                </Link>
+              </div>
+              <div className="">
+                <Link
+                  to={"/dashboard/invoices"}
+                  className="bg-zinc-800 text-white rounded-xl px-5 py-2"
+                >
+                  Voir mes factures
+                </Link>
+              </div>
+              <div className="">
+                <button
+                  onClick={handleDeleteAccount}
+                  className="bg-red-800 text-white rounded-xl px-5 py-2"
+                >
+                  Supprimer mon compte
+                </button>
+              </div>
             </div>
 
             <p>
-              • D’avoir la liste des clients ainsi que le volume de stockage
-              utilisé et disponible • D’avoir une vision sur tous les fichiers
-              des clients • D’avoir un tableau de bord avec des statistiques
+              • D'avoir la liste des clients ainsi que le volume de stockage
+              utilisé et disponible • D'avoir une vision sur tous les fichiers
+              des clients • D'avoir un tableau de bord avec des statistiques
             </p>
           </DashboardContainer>
         </div>
@@ -123,12 +179,12 @@ export default function Dashboard() {
                   </Link>
                 </div>
                 <div className="">
-                  <Link
-                    to={"/dashboard/invoices"}
-                    className="bg-zinc-800 text-white rounded-xl px-5 py-2"
+                  <button
+                    onClick={handleDeleteAccount}
+                    className="bg-red-800 text-white rounded-xl px-5 py-2"
                   >
-                    Voir mes factures
-                  </Link>
+                    Supprimer mon compte
+                  </button>
                 </div>
               </div>
               <p>

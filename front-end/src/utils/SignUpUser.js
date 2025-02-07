@@ -11,7 +11,7 @@ export default async function signUpUser({
     throw new Error("Tous les champs sont requis.");
   }
 
-  const validEmail = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const validEmail = /^[a-zA-Z0-9._:$!%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!validEmail.test(email)) {
     throw new Error("Adresse email invalide.");
   }

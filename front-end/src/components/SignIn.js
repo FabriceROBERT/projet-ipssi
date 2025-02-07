@@ -61,7 +61,7 @@ const SignIn = ({ onClose }) => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Email"
               aria-invalid={!!error}
             />
@@ -88,11 +88,7 @@ const SignIn = ({ onClose }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-2 rounded-lg text-white ${
-              isLoading
-                ? "bg-blue-300 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-600"
-            }`}
+            className="w-full bg-zinc-800 text-white rounded-full px-5 py-2"
           >
             {isLoading ? "Chargement..." : "Se connecter"}
           </button>

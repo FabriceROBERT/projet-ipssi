@@ -18,6 +18,8 @@ export default function Navbar({ user }) {
   const handleSignOut = () => {
     localStorage.removeItem("Id");
     localStorage.removeItem("authToken");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     navigate("/");
   };
 
